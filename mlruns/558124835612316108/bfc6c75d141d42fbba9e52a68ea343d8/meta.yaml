@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/558124835612316108/bfc6c75d141d42fbba9e52a68ea343d8/artifacts
+end_time: 1777158090258
+entry_point_name: ''
+experiment_id: '558124835612316108'
+lifecycle_stage: active
+run_id: bfc6c75d141d42fbba9e52a68ea343d8
+run_name: logistic_regression_breast_cancer
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158090208
+status: 3
+tags: []
+user_id: rifa

@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/938465389551525308/1254078f637e42eea3105e11b2fc9d24/artifacts
+end_time: 1777158221854
+entry_point_name: ''
+experiment_id: '938465389551525308'
+lifecycle_stage: active
+run_id: 1254078f637e42eea3105e11b2fc9d24
+run_name: ablation_breast_cancer
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158216611
+status: 3
+tags: []
+user_id: rifa

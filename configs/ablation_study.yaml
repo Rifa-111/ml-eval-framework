@@ -1,0 +1,91 @@
+# ablation_study.yaml
+# ====================
+# Configuration for a full ablation study across multiple axes.
+# Axes are run independently; each ablation variant is compared to the baseline.
+
+experiment:
+  name: "ablation_study_v1"
+  description: "Impact of data quality, sample size, and feature masking on model performance"
+  random_seed: 42
+  output_dir: "results/ablation"
+
+dataset:
+  name: "breast_cancer"
+  source: "sklearn"
+  test_size: 0.20
+  val_size: 0.10
+  random_seed: 42
+  preprocessing:
+    standardize: true
+
+# Models to evaluate on EVERY ablation variant
+models:
+  - name: "logistic_regression"
+    backend: "sklearn"
+    hyperparams: { C: 1.0 }
+
+  - name: "random_forest"
+    backend: "sklearn"
+    hyperparams: { n_estimators: 100, max_depth: 8 }
+
+  - name: "gradient_boosting"
+    backend: "sklearn"
+    hyperparams: { n_estimators: 100 }
+
+  - name: "mlp_pytorch"
+    backend: "pytorch"
+    epochs: 40
+    batch_size: 32
+    learning_rate: 0.001
+    early_stopping_patience: 8
+    hyperparams:
+      hidden_sizes: [64, 32]
+      dropout: 0.2
+
+ablation:
+  include_baseline: true
+
+  axes:
+    data_quality:
+      enabled: true
+      # Label noise
+      label_noise_rates: [0.05, 0.10, 0.20]
+      # Feature corruption (Gaussian noise sigma)
+      feature_noise_sigmas: [0.1, 0.5]
+      # Missing values (fraction of features zeroed)
+      missing_rates: [0.10, 0.30]
+      # Outlier injection
+      outlier_fractions: [0.05]
+
+    sample_size:
+      enabled: true
+      fractions: [0.10, 0.25, 0.50, 0.75, 1.00]
+
+    feature_selection:
+      enabled: false           # Requires feature importance; enable after first run
+      strategies: ["top_50pct", "top_25pct", "random_50pct"]
+
+evaluation:
+  metrics:
+    accuracy: true
+    fairness: false
+    robustness: true
+    efficiency: true
+  robustness:
+    noise_levels: [0.01, 0.1, 0.5]
+    n_trials: 3
+
+tracking:
+  mlflow:
+    enabled: true
+    tracking_uri: "mlruns"
+    experiment_name: "ablation_study_v1"
+  wandb:
+    enabled: false
+    project: "ml-eval-ablation"
+    mode: "offline"
+
+output:
+  save_results_csv: true
+  save_plots: true
+  plot_format: "png"           # "png" | "pdf" | "svg"

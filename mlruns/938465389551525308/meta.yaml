@@ -1,0 +1,8 @@
+artifact_location: /Users/rifa/Downloads/ml_eval_framework/mlruns/938465389551525308
+creation_time: 1777158168058
+experiment_id: '938465389551525308'
+last_update_time: 1777158168058
+lifecycle_stage: active
+name: ablation_breast_cancer
+trace_location: null
+workspace: default

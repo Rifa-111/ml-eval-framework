@@ -1,0 +1,13 @@
+{
+  "dataset": "breast_cancer",
+  "models": [
+    "logistic_regression",
+    "random_forest",
+    "gradient_boosting"
+  ],
+  "axes": [
+    "data_quality",
+    "sample_size"
+  ],
+  "seed": 42
+}

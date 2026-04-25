@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/469792035524582884/1624a868bc1943a79037ab0125adc9c0/artifacts
+end_time: 1777158152178
+entry_point_name: ''
+experiment_id: '469792035524582884'
+lifecycle_stage: active
+run_id: 1624a868bc1943a79037ab0125adc9c0
+run_name: gradient_boosting_iris
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158152078
+status: 3
+tags: []
+user_id: rifa

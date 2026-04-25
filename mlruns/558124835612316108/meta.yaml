@@ -1,0 +1,8 @@
+artifact_location: /Users/rifa/Downloads/ml_eval_framework/mlruns/558124835612316108
+creation_time: 1777158089059
+experiment_id: '558124835612316108'
+last_update_time: 1777158089059
+lifecycle_stage: active
+name: benchmark_breast_cancer
+trace_location: null
+workspace: default

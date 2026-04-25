@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/558124835612316108/667d8d5f1da1414b9443b5691ae0934d/artifacts
+end_time: 1777158090741
+entry_point_name: ''
+experiment_id: '558124835612316108'
+lifecycle_stage: active
+run_id: 667d8d5f1da1414b9443b5691ae0934d
+run_name: random_forest_breast_cancer
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158090605
+status: 3
+tags: []
+user_id: rifa

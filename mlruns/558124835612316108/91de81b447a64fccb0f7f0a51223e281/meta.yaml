@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/558124835612316108/91de81b447a64fccb0f7f0a51223e281/artifacts
+end_time: 1777158095661
+entry_point_name: ''
+experiment_id: '558124835612316108'
+lifecycle_stage: active
+run_id: 91de81b447a64fccb0f7f0a51223e281
+run_name: mlp_pytorch_breast_cancer
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158094213
+status: 3
+tags: []
+user_id: rifa

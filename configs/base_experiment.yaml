@@ -1,0 +1,76 @@
+# base_experiment.yaml
+# =====================
+# Configuration for a standard classification benchmark run.
+# Override fields via CLI: --config base_experiment.yaml model.hyperparams.n_estimators=200
+
+experiment:
+  name: "classification_benchmark"
+  description: "Baseline model comparison across sklearn and PyTorch backends"
+  random_seed: 42
+  output_dir: "results/benchmark"
+
+dataset:
+  name: "breast_cancer"
+  source: "sklearn"            # sklearn | /path/to/file.csv | /path/to/file.parquet
+  target_col: "label"
+  test_size: 0.20
+  val_size: 0.10
+  random_seed: 42
+  max_samples: null            # null = use all samples
+  preprocessing:
+    standardize: true
+    clip_outliers: false
+    clip_threshold: 5.0
+
+models:
+  - name: "logistic_regression"
+    backend: "sklearn"
+    hyperparams:
+      C: 1.0
+      max_iter: 1000
+
+  - name: "random_forest"
+    backend: "sklearn"
+    hyperparams:
+      n_estimators: 200
+      max_depth: 10
+      min_samples_split: 5
+
+  - name: "gradient_boosting"
+    backend: "sklearn"
+    hyperparams:
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: 5
+
+  - name: "mlp_pytorch"
+    backend: "pytorch"
+    epochs: 60
+    batch_size: 32
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    early_stopping_patience: 10
+    hyperparams:
+      hidden_sizes: [128, 64]
+      dropout: 0.3
+
+evaluation:
+  metrics:
+    accuracy: true
+    fairness: false          # set true and provide sensitive_cols in dataset
+    robustness: true
+    efficiency: true
+  robustness:
+    noise_levels: [0.01, 0.05, 0.1, 0.2]
+    n_trials: 5
+
+tracking:
+  mlflow:
+    enabled: true
+    tracking_uri: "mlruns"
+    experiment_name: "classification_benchmark"
+  wandb:
+    enabled: false           # set true and configure WANDB_API_KEY
+    project: "ml-eval"
+    entity: null
+    mode: "offline"          # "online" | "offline" | "disabled"

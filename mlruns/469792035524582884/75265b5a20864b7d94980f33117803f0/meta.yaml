@@ -1,0 +1,14 @@
+artifact_uri: /Users/rifa/Downloads/ml_eval_framework/mlruns/469792035524582884/75265b5a20864b7d94980f33117803f0/artifacts
+end_time: 1777158151955
+entry_point_name: ''
+experiment_id: '469792035524582884'
+lifecycle_stage: active
+run_id: 75265b5a20864b7d94980f33117803f0
+run_name: logistic_regression_iris
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1777158151935
+status: 3
+tags: []
+user_id: rifa
