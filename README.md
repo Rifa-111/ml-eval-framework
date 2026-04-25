@@ -1,6 +1,6 @@
 # 🔬 ML Eval — End-to-End Model Evaluation & Ablation Framework
 
-A production-grade, reusable framework for training, benchmarking, and comparing machine learning models across multiple dataset variants with automated ablation studies.
+A production-grade, reusable framework for training, benchmarking and comparing machine learning models across multiple dataset variants with automated ablation studies.
 
 ## Architecture
 
