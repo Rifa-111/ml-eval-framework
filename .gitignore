@@ -1,0 +1,22 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+.cache/
+.DS_Store
+# Generated experiment runs and reports
+mlruns/
+wandb/
+results/
+coverage_html/
+htmlcov/
+.coverage
+*.log
+dist/
+build/
