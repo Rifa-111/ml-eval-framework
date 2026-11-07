@@ -18,7 +18,7 @@ from typing import Callable, List, Optional
 
 import numpy as np
 
-from ..core.data_pipeline import DataSplit
+from core.data_pipeline import DataSplit
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +160,7 @@ def build_feature_selection_axis(
     -------
     list of AblationVariant
     """
-    from ..ablation.engine import AblationVariant
+    from ablation.engine import AblationVariant
 
     selector_map = {
         "variance": top_k_by_variance,
