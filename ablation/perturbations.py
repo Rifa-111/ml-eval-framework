@@ -6,12 +6,7 @@ import copy
 from typing import Callable, List
 import numpy as np
 
-try:
-    from ..core.data_pipeline import DataSplit
-except ImportError:
-    import sys, os
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-    from ml_eval_framework.core.data_pipeline import DataSplit
+from core.data_pipeline import DataSplit
 
 
 def label_noise(noise_rate: float, seed: int = 42) -> Callable[[DataSplit], DataSplit]:
@@ -121,10 +116,7 @@ def outlier_injection(fraction: float = 0.05, magnitude: float = 5.0, seed: int 
 
 def build_data_quality_axis():
     """Standard data quality ablation variants."""
-    try:
-        from ..ablation.engine import AblationVariant
-    except ImportError:
-        from ml_eval_framework.ablation.engine import AblationVariant
+    from ablation.engine import AblationVariant
     return [
         AblationVariant("dq_clean",      "No corruption",       "data_quality", lambda s: s,                    params={"noise": 0.0}),
         AblationVariant("dq_noise_5",    "5% label noise",      "data_quality", label_noise(0.05),               params={"noise": 0.05}),
@@ -140,10 +132,7 @@ def build_data_quality_axis():
 
 def build_sample_size_axis(fractions=(0.1, 0.25, 0.5, 0.75, 1.0)):
     """Sample-size scaling ablation variants."""
-    try:
-        from ..ablation.engine import AblationVariant
-    except ImportError:
-        from ml_eval_framework.ablation.engine import AblationVariant
+    from ablation.engine import AblationVariant
     variants = []
     for frac in fractions:
         fn = (lambda s: s) if frac >= 1.0 else sample_subsetting(frac)
