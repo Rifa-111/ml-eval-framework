@@ -380,7 +380,7 @@ class TestReleaseRegression:
     def test_ablation_imports_from_repository_root(self):
         from ablation.engine import AblationEngine
         from ablation.perturbations import build_data_quality_axis
-        from ablation.feature_selector import FeatureSelector
+        from ablation.feature_selector import top_k_by_variance
         assert AblationEngine is not None
         assert callable(build_data_quality_axis)
-        assert FeatureSelector is not None
+        assert callable(top_k_by_variance)
