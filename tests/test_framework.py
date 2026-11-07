@@ -331,3 +331,56 @@ class TestAblationIntegration:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+
+
+class TestReleaseRegression:
+    def test_scaler_is_fitted_to_training_samples_only(self):
+        from core.data_pipeline import DataPipeline, DatasetConfig
+        from sklearn.datasets import load_iris
+        from sklearn.model_selection import train_test_split
+        cfg = DatasetConfig(name="iris", source="sklearn", random_seed=42)
+        pipeline = DataPipeline(cfg)
+        split = pipeline.load()
+        raw = load_iris().data.astype(np.float32)
+        labels = load_iris().target
+        X_tv, _, y_tv, _ = train_test_split(
+            raw, labels, test_size=cfg.test_size, random_state=cfg.random_seed,
+            stratify=labels,
+        )
+        X_train, _, _, _ = train_test_split(
+            X_tv, y_tv, test_size=cfg.val_size / (1 - cfg.test_size),
+            random_state=cfg.random_seed, stratify=y_tv,
+        )
+        np.testing.assert_allclose(
+            pipeline._scaler.mean_, X_train.mean(axis=0), rtol=1e-5, atol=1e-5,
+        )
+        assert len(split.X_train) > 0
+
+    def test_sensitive_attributes_follow_actual_training_rows(self, tmp_path):
+        import pandas as pd
+        from core.data_pipeline import DataPipeline, DatasetConfig
+        df = pd.DataFrame({
+            "feature": np.arange(120, dtype=float),
+            "label": np.tile([0, 1], 60),
+            "cohort": [f"id_{i}" for i in range(120)],
+        })
+        path = tmp_path / "cohort.csv"
+        df.to_csv(path, index=False)
+        cfg = DatasetConfig(
+            name="cohort", source=str(path), target_col="label",
+            feature_cols=["feature"], sensitive_cols=["cohort"],
+            preprocessing={"standardize": False},
+        )
+        split = DataPipeline(cfg).load()
+        assert len(split.sensitive_train) == len(split.X_train)
+        assert len(split.sensitive_test) == len(split.X_test)
+        for row, cohort in zip(split.X_train, split.sensitive_train["cohort"]):
+            assert cohort == f"id_{int(row[0])}"
+
+    def test_ablation_imports_from_repository_root(self):
+        from ablation.engine import AblationEngine
+        from ablation.perturbations import build_data_quality_axis
+        from ablation.feature_selector import FeatureSelector
+        assert AblationEngine is not None
+        assert callable(build_data_quality_axis)
+        assert FeatureSelector is not None
