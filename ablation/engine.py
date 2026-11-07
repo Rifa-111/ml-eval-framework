@@ -24,20 +24,11 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-try:
-    from ..core.data_pipeline import DataSplit
-    from ..metrics.accuracy import AccuracyMetrics
-    from ..metrics.efficiency import EfficiencyMetrics
-    from ..metrics.fairness import FairnessMetrics
-    from ..metrics.robustness import RobustnessMetrics
-except ImportError:
-    import sys, os
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-    from ml_eval_framework.core.data_pipeline import DataSplit
-    from ml_eval_framework.metrics.accuracy import AccuracyMetrics
-    from ml_eval_framework.metrics.efficiency import EfficiencyMetrics
-    from ml_eval_framework.metrics.fairness import FairnessMetrics
-    from ml_eval_framework.metrics.robustness import RobustnessMetrics
+from core.data_pipeline import DataSplit
+from metrics.accuracy import AccuracyMetrics
+from metrics.efficiency import EfficiencyMetrics
+from metrics.fairness import FairnessMetrics
+from metrics.robustness import RobustnessMetrics
 
 logger = logging.getLogger(__name__)
 

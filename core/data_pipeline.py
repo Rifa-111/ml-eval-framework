@@ -126,10 +126,13 @@ class DataPipeline:
             if sensitive is not None:
                 sensitive = sensitive.iloc[idx].reset_index(drop=True)
 
-        X = self._preprocess_features(X)
+        # Split first, then fit preprocessing on the training partition only.
         y = self._encode_labels(y)
 
         split = self._split(X, y, sensitive, feature_names)
+        split.X_train = self._preprocess_features(split.X_train)
+        split.X_val = self._transform_features(split.X_val)
+        split.X_test = self._transform_features(split.X_test)
         logger.info(f"Dataset loaded. Summary: {split.summary()}")
         return split
 
@@ -195,6 +198,18 @@ class DataPipeline:
             X = np.clip(X, -threshold, threshold)
         return X.astype(np.float32)
 
+    def _transform_features(self, X: np.ndarray) -> np.ndarray:
+        """Apply the training-fitted scaler and clipping to held-out samples."""
+        cfg = self.config.preprocessing
+        X = np.asarray(X)
+        if cfg.get("standardize", True):
+            if self._scaler is None:
+                raise RuntimeError("Training scaler is not fitted")
+            X = self._scaler.transform(X)
+        if cfg.get("clip_outliers"):
+            X = np.clip(X, -cfg.get("clip_threshold", 5.0), cfg.get("clip_threshold", 5.0))
+        return X.astype(np.float32)
+
     def _encode_labels(self, y: np.ndarray) -> np.ndarray:
         if y.dtype.kind in ("U", "O"):  # string labels
             self._label_encoder = LabelEncoder()
@@ -218,8 +233,8 @@ class DataPipeline:
         )
         # Then carve out val from train+val
         val_ratio = self.config.val_size / (1 - self.config.test_size)
-        X_train, X_val, y_train, y_val = train_test_split(
-            X_trainval, y_trainval,
+        X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+            X_trainval, y_trainval, idx_tv,
             test_size=val_ratio,
             random_state=seed,
             stratify=y_trainval if len(np.unique(y_trainval)) > 1 else None,
@@ -227,7 +242,7 @@ class DataPipeline:
 
         sens_train = sens_test = None
         if sensitive is not None:
-            sens_train = sensitive.iloc[idx_tv].reset_index(drop=True)
+            sens_train = sensitive.iloc[idx_train].reset_index(drop=True)
             sens_test = sensitive.iloc[idx_test].reset_index(drop=True)
 
         return DataSplit(

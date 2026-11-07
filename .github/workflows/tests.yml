@@ -1,0 +1,43 @@
+name: Lightweight Python checks
+on:
+  push:
+    branches: [main, fix/release-readiness-2026-11]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m compileall -q core ablation metrics integrations experiments tests
+      - run: python -m pytest -q tests/
+      - name: Smoke-test public benchmark in an isolated directory
+        run: |
+          python - <<'PY'
+          import os
+          import tempfile
+          from experiments.classification_benchmark import run_benchmark
+
+          with tempfile.TemporaryDirectory() as tempdir:
+              original = os.getcwd()
+              try:
+                  os.chdir(tempdir)
+                  df = run_benchmark("iris", ["lr", "rf"])
+                  assert len(df) == 2, (
+                      "Expected exactly two fresh experiment records; "
+                      "inspect the benchmark output for failed model runs"
+                  )
+                  assert set(df["model_name"]) == {
+                      "logistic_regression", "random_forest"
+                  }
+              finally:
+                  os.chdir(original)
+          PY
