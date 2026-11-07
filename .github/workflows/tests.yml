@@ -20,4 +20,9 @@ jobs:
       - run: python -m compileall -q core ablation metrics integrations experiments tests
       - run: python -m pytest -q tests/
       - name: Smoke-test public benchmark CLI
-        run: python -c "from experiments.classification_benchmark import run_benchmark; df = run_benchmark(\'iris\', [\'lr\', \'rf\']); assert len(df) == 2, \'Both baseline models must produce results\'"
+        run: |
+          python - <<'PY'
+          from experiments.classification_benchmark import run_benchmark
+          df = run_benchmark("iris", ["lr", "rf"])
+          assert len(df) == 2, "Both baseline models must produce results"
+          PY
